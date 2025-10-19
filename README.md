@@ -376,8 +376,24 @@ docker logs -f ws-api-dotnet
 
 ### Delete Stack
 
+**IMPORTANT**: Delete the stack to avoid ongoing costs when not in use!
+
+**Windows PowerShell:**
+```powershell
+# Delete the stack
+aws cloudformation delete-stack `
+    --stack-name ws-api-infrastructure `
+    --region us-east-2
+
+# Wait for deletion to complete
+aws cloudformation wait stack-delete-complete `
+    --stack-name ws-api-infrastructure `
+    --region us-east-2
+```
+
+**Linux/Mac/Git Bash:**
 ```bash
-# Using script
+# Using script (with confirmation)
 chmod +x delete-stack.sh
 ./delete-stack.sh
 
@@ -392,7 +408,50 @@ aws cloudformation wait stack-delete-complete \
     --region us-east-2
 ```
 
-**WARNING**: This will permanently delete all resources!
+**Verify Deletion:**
+```powershell
+# Check stack is deleted
+aws cloudformation describe-stacks `
+    --stack-name ws-api-infrastructure `
+    --region us-east-2
+# Expected: "Stack with id ws-api-infrastructure does not exist"
+
+# Verify no running EC2 instances
+aws ec2 describe-instances `
+    --region us-east-2 `
+    --filters "Name=instance-state-name,Values=running" `
+    --query 'Reservations[*].Instances[*].[InstanceId,State.Name,Tags[?Key==`Name`].Value|[0]]' `
+    --output table
+```
+
+**Optional: Delete EC2 Key Pair**
+
+The key pair doesn't cost anything, but you can delete it:
+
+```powershell
+# Delete from AWS
+aws ec2 delete-key-pair `
+    --key-name ws-api-key `
+    --region us-east-2
+
+# Delete local file (PowerShell)
+Remove-Item ws-api-key.pem
+
+# Delete local file (Linux/Mac)
+rm ws-api-key.pem
+```
+
+**Resources Deleted:**
+- ✅ EC2 Instance (stops all charges)
+- ✅ VPC and subnets
+- ✅ Security Groups
+- ✅ Internet Gateway
+- ✅ IAM Roles and Instance Profile
+- ✅ All associated resources
+
+**Cost After Deletion:** $0.00/month
+
+**WARNING**: This will permanently delete all resources! Make sure to backup any data first.
 
 ---
 
