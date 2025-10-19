@@ -1,0 +1,18 @@
+[
+  {
+    "ParameterKey": "EnvironmentName",
+    "ParameterValue": "ws-api-dev"
+  },
+  {
+    "ParameterKey": "InstanceType",
+    "ParameterValue": "t3.micro"
+  },
+  {
+    "ParameterKey": "KeyPairName",
+    "ParameterValue": "YOUR_KEY_PAIR_NAME_HERE"
+  },
+  {
+    "ParameterKey": "AllowedCIDR",
+    "ParameterValue": "0.0.0.0/0"
+  }
+]
