@@ -9,7 +9,7 @@
   },
   {
     "ParameterKey": "KeyPairName",
-    "ParameterValue": "YOUR_KEY_PAIR_NAME_HERE"
+    "ParameterValue": "ws-api-key"
   },
   {
     "ParameterKey": "AllowedCIDR",
